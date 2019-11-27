@@ -3,16 +3,17 @@ namespace CakeS3\Datasource;
 
 use Aws\S3\S3Client;
 use Cake\Datasource\ConnectionInterface;
+use Cake\Database\Connection as CakeConnection;
 
 /**
  * Class S3 Connection
  *
  * @package CakeS3\Database
  */
-class Connection implements ConnectionInterface
+class Connection extends CakeConnection
 {
-    /** @var array Connection configure parameter */
-    protected $_config = [];
+//    /** @var array Connection configure parameter */
+//    protected $_config = [];
 
     /** @var \Aws\S3\S3Client|null */
     protected $_s3Client = null;
@@ -24,6 +25,8 @@ class Connection implements ConnectionInterface
      */
     public function __construct(array $config = [])
     {
+    	parent::__construct($config);
+
         if (empty($config['key']) || empty($config['secret']) ||
             empty($config['region']) || empty($config['bucketName'])
         ) {
@@ -46,86 +49,98 @@ class Connection implements ConnectionInterface
         $this->_s3Client->getCommand('HeadBucket', ['Bucket' => $this->_config['bucketName']]);
     }
 
-    /**
-     * Get configure name.
-     *
-     * @return mixed|string
-     */
-    public function configName()
-    {
-        if (empty($this->_config['name'])) {
-            return '';
-        }
+	/**
+	 * This connection does not require a driver.
+	 *
+	 * @param \Cake\Database\Driver|string $driver
+	 * @param array $config
+	 * @return CakeConnection|void
+	 */
+	public function setDriver($driver, $config = [])
+	{
 
-        return $this->_config['name'];
-    }
+	}
 
-    /**
-     * Get configure
-     *
-     * @return array
-     */
-    public function config()
-    {
-        return $this->_config;
-    }
+//    /**
+//     * Get configure name.
+//     *
+//     * @return mixed|string
+//     */
+//    public function configName()
+//    {
+//        if (empty($this->_config['name'])) {
+//            return '';
+//        }
+//
+//        return $this->_config['name'];
+//    }
+//
+//    /**
+//     * Get configure
+//     *
+//     * @return array
+//     */
+//    public function config()
+//    {
+//        return $this->_config;
+//    }
 
-    /**
-     * This method is not supported.
-     *
-     * @param callable $transaction
-     */
-    public function transactional(callable $transaction)
-    {
-    }
+//    /**
+//     * This method is not supported.
+//     *
+//     * @param callable $transaction
+//     */
+//    public function transactional(callable $transaction)
+//    {
+//    }
+//
+//    /**
+//     * This method is not supported.
+//     *
+//     * @param callable $operation
+//     */
+//    public function disableConstraints(callable $operation)
+//    {
+//    }
 
-    /**
-     * This method is not supported.
-     *
-     * @param callable $operation
-     */
-    public function disableConstraints(callable $operation)
-    {
-    }
+//    /**
+//     * This method is not supported.
+//     *
+//     * @param callable $operation
+//     */
+//    public function logQueries($enable = null)
+//    {
+//    }
 
-    /**
-     * This method is not supported.
-     *
-     * @param callable $operation
-     */
-    public function logQueries($enable = null)
-    {
-    }
+//    /**
+//     * This method is not supported.
+//     *
+//     * @param callable $operation
+//     */
+//    public function logger($instance = null)
+//    {
+//    }
 
-    /**
-     * This method is not supported.
-     *
-     * @param callable $operation
-     */
-    public function logger($instance = null)
-    {
-    }
-
-    /**
-     * This method is not supported.
-     *
-     * @return \Cake\Database\Log\QueryLogger logger instance
-     */
-    public function getLogger()
-    {
-        return new \Cake\Database\Log\QueryLogger();
-    }
-
-    /**
-     * This method is not supported.
-     *
-     * @param \Cake\Database\Log\QueryLogger $logger Logger object
-     * @return $this
-     */
-    public function setLogger($logger)
-    {
-        return $this;
-    }
+//    /**
+//     * This method is not supported.
+//     *
+//     * @return \Cake\Database\Log\QueryLogger logger instance
+//     */
+//    public function getLogger()
+//    {
+//        return new \Cake\Database\Log\QueryLogger();
+//    }
+//
+//    /**
+//     * This method is not supported.
+//     *
+//     * @param \Cake\Database\Log\QueryLogger $logger Logger object
+//     * @return $this
+//     */
+//    public function setLogger($logger)
+//    {
+//        return $this;
+//    }
 
     /**
      * Pre processing to convert the key.
